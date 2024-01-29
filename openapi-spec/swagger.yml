@@ -1,0 +1,835 @@
+openapi: 3.0.0
+info:
+  title: Organizze API
+  description: >
+    The Organizze API enables communication with your Organizze account. This document explains how Organizze works, the involved objects, and how communication can be achieved. This is the first version of the API, still in beta, and some changes and improvements will be implemented in the future.
+  version: 1.0.0
+servers:
+  - url: https://api.organizze.com.br/rest/v2
+security:
+  - basicAuth: []
+    userAgent: []
+components:
+  securitySchemes:
+      basicAuth:
+        type: http
+        scheme: basic
+      userAgent:
+        type: apiKey
+        in: header
+        name: User-Agent
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        archived:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        default:
+          type: boolean
+        type:
+          type: string
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        parent_id:
+          type: integer
+        recurring:
+          type: boolean
+    Transaction:
+      type: object
+      properties:
+        id:
+          description: ID of the Bank Account
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+          pattern: ^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$
+          minLength: 10
+          maxLength: 10
+        paid:
+          type: boolean
+        amount_cents:
+          type: integer
+          format: int32
+          minimum: -2147483647
+          maximum: 2147483647
+        total_installments:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+        recurring:
+          type: boolean
+        account_id:
+          description: ID of the Bank Account
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+        category_id:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+        notes:
+          type: string
+          nullable: true
+        attachments_count:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
+        credit_card_id:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+          nullable: true
+        credit_card_invoice_id:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+          nullable: true
+        paid_credit_card_id:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+          nullable: true
+        paid_credit_card_invoice_id:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+          nullable: true
+        oposite_transaction_id:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+          nullable: true
+        oposite_account_id:
+          description: ID of the Bank Account
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+          nullable: true
+        tags:
+          type: array
+          minItems: 0
+          maxItems: 100
+          items:
+            type: string
+        attachments:
+          type: array
+          minItems: 0
+          maxItems: 100
+          items:
+            type: string
+    Budget:
+      type: object
+      properties:
+        amount_in_cents:
+          type: integer
+        category_id:
+          type: integer
+        date:
+          type: string
+          format: date
+        activity_type:
+          type: integer
+        total:
+          type: integer
+        predicted_total:
+          type: integer
+        percentage:
+          type: string
+  
+    CreditCard:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        card_network:
+          type: string
+        closing_day:
+          type: integer
+        due_day:
+          type: integer
+        limit_cents:
+          type: integer
+        kind:
+          type: string
+        archived:
+          type: boolean
+        default:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+  
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date
+        starting_date:
+          type: string
+          format: date
+        closing_date:
+          type: string
+          format: date
+        amount_cents:
+          type: integer
+        payment_amount_cents:
+          type: integer
+        balance_cents:
+          type: integer
+        previous_balance_cents:
+          type: integer
+        credit_card_id:
+          type: integer
+  
+    TransactionDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        paid:
+          type: boolean
+        amount_cents:
+          type: integer
+        total_installments:
+          type: integer
+        installment:
+          type: integer
+        recurring:
+          type: boolean
+        account_id:
+          type: integer
+        account_type:
+          type: string
+        category_id:
+          type: integer
+        contact_id:
+          type: integer
+        notes:
+          type: string
+        attachments_count:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+  
+    PaymentDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        paid:
+          type: boolean
+        amount_cents:
+          type: integer
+        total_installments:
+          type: integer
+        installment:
+          type: integer
+        recurring:
+          type: boolean
+        account_id:
+          type: integer
+        account_type:
+          type: string
+        category_id:
+          type: integer
+        contact_id:
+          type: integer
+        notes:
+          type: string
+        attachments_count:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+paths:
+  /users/{userId}:
+    get:
+      summary: Get user details
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /accounts:
+    get:
+      summary: List bank accounts
+      operationId: getAccounts
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Account"
+    post:
+      summary: Create bank account
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Account"
+      responses:
+        '201':
+          description: Account created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+  /accounts/{accountId}:
+    get:
+      summary: Get bank account details
+      operationId: getAccount
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: Account ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+    put:
+      summary: Update bank account
+      operationId: updateAccount
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: Account ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Account"
+      responses:
+        '200':
+          description: Account updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+    delete:
+      summary: Delete bank account
+      operationId: deleteAccount
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: Account ID
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Account deleted successfully
+  /categories:
+    get:
+      summary: List categories
+      operationId: getCategories
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+    post:
+      summary: Create category
+      operationId: createCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+      responses:
+        '201':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+  /categories/{categoryId}:
+    get:
+      summary: Get category details
+      operationId: getCategory
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          description: Category ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+    put:
+      summary: Update category
+      operationId: updateCategory
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          description: Category ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+      responses:
+        '200':
+          description: Category updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+    delete:
+      summary: Delete category
+      operationId: deleteCategory
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          description: Category ID
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Category deleted successfully
+  /transactions:
+    get:
+      summary: List transactions
+      operationId: getTransactions
+      parameters:
+        - name: account_id
+          in: query
+          required: true
+          description: Account ID
+          schema:
+            type: integer
+        - name: start_date
+          in: query
+          description: "Start date (format: YYYY-MM-DD)"
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          description: "End date (format: YYYY-MM-DD)"
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+    post:
+      summary: Create transaction
+      operationId: CreateTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Transaction"
+      responses:
+        '201':
+          description: Transaction created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+  /transactions/{transactionId}:
+    get:
+      summary: Get transaction details
+      operationId: getTransaction
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: Transaction ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+    put:
+      summary: Update transaction
+      operationId: updateTransaction
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: Transaction ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Transaction"
+      responses:
+        '200':
+          description: Transaction updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+    delete:
+      summary: Delete transaction
+      operationId: deleteTransaction
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: Transaction ID
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Transaction deleted successfully
+  /budgets/{year}:
+    get:
+      summary: List budgets for the specified year
+      operationId: getBudgetsByYear
+      parameters:
+        - name: year
+          in: path
+          required: true
+          description: Year for budgets
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Budget"
+
+  /budgets/{year}/{month}:
+    get:
+      summary: List budgets for the specified year and month
+      operationId: getBudgetsByYearAndMonth
+      parameters:
+        - name: year
+          in: path
+          required: true
+          description: Year for budgets
+          schema:
+            type: integer
+        - name: month
+          in: path
+          required: true
+          description: Month for budgets
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Budget"
+
+  /credit_cards:
+    get:
+      summary: List credit cards
+      operationId: getCreditCards
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CreditCard"
+    post:
+      summary: Create a new credit card
+      operationId: createCreditCard
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreditCard"
+      responses:
+        '201':
+          description: Credit card created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreditCard"
+
+  /credit_cards/{creditCardId}:
+    get:
+      summary: Get credit card details
+      operationId: getCreditCard
+      parameters:
+        - name: creditCardId
+          in: path
+          required: true
+          description: Credit card ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreditCard"
+    put:
+      summary: Update credit card details
+      operationId: updateCreditCard
+      parameters:
+        - name: creditCardId
+          in: path
+          required: true
+          description: Credit card ID
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreditCard"
+      responses:
+        '200':
+          description: Credit card updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreditCard"
+
+    delete:
+      summary: Delete credit card
+      operationId: deleteCreditCard
+      parameters:
+        - name: creditCardId
+          in: path
+          required: true
+          description: Credit card ID
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Credit card deleted successfully
+
+  /credit_cards/{creditCardId}/invoices:
+    get:
+      summary: List invoices for a credit card
+      operationId: getCreditCardInvoices
+      parameters:
+        - name: creditCardId
+          in: path
+          required: true
+          description: Credit card ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+
+  /credit_cards/{creditCardId}/invoices/{invoiceId}:
+    get:
+      summary: Get details of a credit card invoice
+      operationId: getCreditCardInvoice
+      parameters:
+        - name: creditCardId
+          in: path
+          required: true
+          description: Credit card ID
+          schema:
+            type: integer
+        - name: invoiceId
+          in: path
+          required: true
+          description: Invoice ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+
+  /credit_cards/{creditCardId}/invoices/{invoiceId}/transactions:
+    get:
+      summary: List transactions for a credit card invoice
+      operationId: getCreditCardInvoiceTransactions
+      parameters:
+        - name: creditCardId
+          in: path
+          required: true
+          description: Credit card ID
+          schema:
+            type: integer
+        - name: invoiceId
+          in: path
+          required: true
+          description: Invoice ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TransactionDetails"
+
+  /credit_cards/{creditCardId}/invoices/{invoiceId}/payments:
+    get:
+      summary: List payments for a credit card invoice
+      operationId: getCreditCardInvoicePayments
+      parameters:
+        - name: creditCardId
+          in: path
+          required: true
+          description: Credit card ID
+          schema:
+            type: integer
+        - name: invoiceId
+          in: path
+          required: true
+          description: Invoice ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentDetails"
+
