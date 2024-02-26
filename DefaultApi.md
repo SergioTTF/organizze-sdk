@@ -1207,7 +1207,7 @@ const configuration = .createConfiguration();
 const apiInstance = new .DefaultApi(configuration);
 
 let body:.DefaultApiGetTransactionsRequest = {
-  // number | Account ID
+  // number | Account ID (optional)
   accountId: 1,
   // string | Start date (format: YYYY-MM-DD) (optional)
   startDate: new Date('1970-01-01').toISOString().split('T')[0];,
@@ -1225,7 +1225,7 @@ apiInstance.getTransactions(body).then((data:any) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **accountId** | [**number**] | Account ID | defaults to undefined
+ **accountId** | [**number**] | Account ID | (optional) defaults to undefined
  **startDate** | [**string**] | Start date (format: YYYY-MM-DD) | (optional) defaults to undefined
  **endDate** | [**string**] | End date (format: YYYY-MM-DD) | (optional) defaults to undefined
 

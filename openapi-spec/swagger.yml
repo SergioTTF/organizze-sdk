@@ -506,7 +506,7 @@ paths:
       parameters:
         - name: account_id
           in: query
-          required: true
+          required: false
           description: Account ID
           schema:
             type: integer

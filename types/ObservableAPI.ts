@@ -687,7 +687,7 @@ export class ObservableDefaultApi {
      * @param startDate Start date (format: YYYY-MM-DD)
      * @param endDate End date (format: YYYY-MM-DD)
      */
-    public getTransactionsWithHttpInfo(accountId: number, startDate?: string, endDate?: string, _options?: Configuration): Observable<HttpInfo<Array<Transaction>>> {
+    public getTransactionsWithHttpInfo(accountId?: number, startDate?: string, endDate?: string, _options?: Configuration): Observable<HttpInfo<Array<Transaction>>> {
         const requestContextPromise = this.requestFactory.getTransactions(accountId, startDate, endDate, _options);
 
         // build promise chain
@@ -712,7 +712,7 @@ export class ObservableDefaultApi {
      * @param startDate Start date (format: YYYY-MM-DD)
      * @param endDate End date (format: YYYY-MM-DD)
      */
-    public getTransactions(accountId: number, startDate?: string, endDate?: string, _options?: Configuration): Observable<Array<Transaction>> {
+    public getTransactions(accountId?: number, startDate?: string, endDate?: string, _options?: Configuration): Observable<Array<Transaction>> {
         return this.getTransactionsWithHttpInfo(accountId, startDate, endDate, _options).pipe(map((apiResponse: HttpInfo<Array<Transaction>>) => apiResponse.data));
     }
 

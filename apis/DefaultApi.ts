@@ -959,13 +959,8 @@ export class DefaultApiRequestFactory extends BaseAPIRequestFactory {
      * @param startDate Start date (format: YYYY-MM-DD)
      * @param endDate End date (format: YYYY-MM-DD)
      */
-    public async getTransactions(accountId: number, startDate?: string, endDate?: string, _options?: Configuration): Promise<RequestContext> {
+    public async getTransactions(accountId?: number, startDate?: string, endDate?: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
-
-        // verify required parameter 'accountId' is not null or undefined
-        if (accountId === null || accountId === undefined) {
-            throw new RequiredError("DefaultApi", "getTransactions", "accountId");
-        }
 
 
 

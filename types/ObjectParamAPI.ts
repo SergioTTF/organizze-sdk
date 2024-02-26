@@ -215,7 +215,7 @@ export interface DefaultApiGetTransactionsRequest {
      * @type number
      * @memberof DefaultApigetTransactions
      */
-    accountId: number
+    accountId?: number
     /**
      * Start date (format: YYYY-MM-DD)
      * @type string
@@ -646,7 +646,7 @@ export class ObjectDefaultApi {
      * List transactions
      * @param param the request object
      */
-    public getTransactionsWithHttpInfo(param: DefaultApiGetTransactionsRequest, options?: Configuration): Promise<HttpInfo<Array<Transaction>>> {
+    public getTransactionsWithHttpInfo(param: DefaultApiGetTransactionsRequest = {}, options?: Configuration): Promise<HttpInfo<Array<Transaction>>> {
         return this.api.getTransactionsWithHttpInfo(param.accountId, param.startDate, param.endDate,  options).toPromise();
     }
 
@@ -654,7 +654,7 @@ export class ObjectDefaultApi {
      * List transactions
      * @param param the request object
      */
-    public getTransactions(param: DefaultApiGetTransactionsRequest, options?: Configuration): Promise<Array<Transaction>> {
+    public getTransactions(param: DefaultApiGetTransactionsRequest = {}, options?: Configuration): Promise<Array<Transaction>> {
         return this.api.getTransactions(param.accountId, param.startDate, param.endDate,  options).toPromise();
     }
 

@@ -410,7 +410,7 @@ export class PromiseDefaultApi {
      * @param startDate Start date (format: YYYY-MM-DD)
      * @param endDate End date (format: YYYY-MM-DD)
      */
-    public getTransactionsWithHttpInfo(accountId: number, startDate?: string, endDate?: string, _options?: Configuration): Promise<HttpInfo<Array<Transaction>>> {
+    public getTransactionsWithHttpInfo(accountId?: number, startDate?: string, endDate?: string, _options?: Configuration): Promise<HttpInfo<Array<Transaction>>> {
         const result = this.api.getTransactionsWithHttpInfo(accountId, startDate, endDate, _options);
         return result.toPromise();
     }
@@ -421,7 +421,7 @@ export class PromiseDefaultApi {
      * @param startDate Start date (format: YYYY-MM-DD)
      * @param endDate End date (format: YYYY-MM-DD)
      */
-    public getTransactions(accountId: number, startDate?: string, endDate?: string, _options?: Configuration): Promise<Array<Transaction>> {
+    public getTransactions(accountId?: number, startDate?: string, endDate?: string, _options?: Configuration): Promise<Array<Transaction>> {
         const result = this.api.getTransactions(accountId, startDate, endDate, _options);
         return result.toPromise();
     }
